@@ -13,7 +13,21 @@ app.use(express.static(path.join(__dirname, "public")));
 
 io.on("connection",function(socket) {
   console.log("connected");
+ socket.on("send loaction",function(data) {
+  io.emit("recived-location",{
+    id: socket.id,
+    ...data,
+    
+  });
+  socket.on("disconnect", () => {
+    console.log("User disconnected: ", socket.id);
+    io.emit("user-disconnect", socket.id); // Notify all clients
+  });
+ });
+  
 })
+
+
 
 
 app.get("/", (req, res) => {
